@@ -13,15 +13,31 @@ export const userReducer = (state, action) => {
       return {
         users: [action.payload, ...state.users]
       }
+    case 'LOGIN':
+      return {
+        ...state,
+        sessionID: action.payload.sessionID,
+        username: action.payload.username,
+        userID: action.payload.userID        
+      }
+    case 'REGISTER':
+      return {
+        ...state,
+        sessionID: action.payload.sessionID,
+        username: action.payload.username,
+        userID: action.payload.userID
+      }
     default:
-      return state
+      return state;
   }
 }
 
 export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, {
-    users: null  
-  })
+    users: null,
+    sessionID: null,
+    username: null
+  });
 
 
   return (

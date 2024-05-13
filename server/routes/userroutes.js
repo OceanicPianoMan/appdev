@@ -1,4 +1,6 @@
 const express = require('express')
+const router = express.Router()
+
 
 //control import
 const {
@@ -6,10 +8,13 @@ const {
   getUser,
   createUser,
   deleteUser,
-  updateUser
+  updateUser,
+  loginUser,
+  handleFollow,
+  handleFollowing,
+  createList,
+  deleteList
 } = require('../controllers/userController')
-
-const router = express.Router()
 
 //GET all users
 router.get('/', getUsers)
@@ -18,7 +23,10 @@ router.get('/', getUsers)
 router.get('/:id', getUser)
 
 //POST new user
-router.post('/', createUser)
+router.post('/createUser', createUser)
+
+// POST login
+router.post('/loginUser', loginUser);
 
 //PATCH user
 router.patch('/:id', updateUser)
@@ -26,5 +34,9 @@ router.patch('/:id', updateUser)
 //DELETE user
 router.delete('/:id', deleteUser)
 
+router.post('/:id/follow', handleFollow);
+router.post('/:id/following', handleFollowing);
+router.post('/:id/lists', createList);
+router.delete('/:id/lists/:listId', deleteList);
 
 module.exports = router

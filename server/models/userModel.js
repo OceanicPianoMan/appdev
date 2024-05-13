@@ -11,20 +11,26 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  password: {
-    type: String,
-    required: true
-  },
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
+  password: {
+    type: String,
+    required: true,
+    unique: true
+  },  
   followers: {
     type: Number,
   },
   following: {
     type: Number,
   },
+  lists: [{
+    name: String,
+    items: [String]
+  }],
   listQuantity: {
     type: Number,
   },
@@ -33,8 +39,8 @@ const userSchema = new Schema({
   },
   reviewQuantity: {
     type: Number,
-  }
+  },
   
-}, { timestamp: true } )
+}, { timestamps: true } )
 
 module.exports = mongoose.model('User', userSchema)

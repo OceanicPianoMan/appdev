@@ -1,0 +1,60 @@
+.user-profile {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.user-profile h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.user-profile p {
+  margin-bottom: 10px;
+}
+
+.user-profile img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.user-profile .change-picture-btn {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.user-profile .change-picture-btn:hover {
+  background-color: #0056b3;
+}
+
+.change-profile-picture-form {
+  margin-top: 20px;
+}
+
+.change-profile-picture-form input[type="file"] {
+  display: none;
+}
+
+.change-profile-picture-form button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.change-profile-picture-form button:hover {
+  background-color: #0056b3;
+}
