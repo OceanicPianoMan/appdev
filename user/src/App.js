@@ -10,11 +10,6 @@ import Albums from './pages/Albums';
 import Users from './pages/Users';
 import Navbar from './components/Navbar';
 
-//define your default page component
-const DefaultPage = () => {
-  return <Navigate to="/Index" />;
-};
-
 function App() {
   return (
     <div className="App">
@@ -22,7 +17,7 @@ function App() {
         <div className="pages">
           <Navbar />        
           <Routes>
-            <Route path="/" element={<DefaultPage />} />
+            <Route path="/" element={<Index />} />
             <Route path="/Home" element={<Home />} />
             <Route path="/UserProfile/:id" element={<UserProfile />} />
             <Route path="/Register" element={<Register />} />

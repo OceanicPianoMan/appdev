@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
+import '../styles/ListStyles.css';
 
 const CreateList = ({ onClose }) => {
   const { sessionID, userID } = useContext(UserContext);
@@ -87,10 +88,10 @@ const CreateList = ({ onClose }) => {
   };
 
   return (
-    <div className="popup">
-      <div className="popup-inner">
+    <div className="create-list-container">
+      <div className="create-list-inner">
         <h2>Make New playlist</h2>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         <input
           type="text"
           placeholder="Playlist name..."
@@ -103,33 +104,37 @@ const CreateList = ({ onClose }) => {
           value={newListItem}
           onChange={handleInputChange}
         />
-        <h3>Albums:</h3>
-        {filteredSongs.map(({ _id, title, songs, band, release }) => (
-          <div key={_id}>
-            <h4>{title} - {band} ({release})</h4>
-            <ul>
-              {songs.map((song, index) => (
-                <li key={index}>
-                  {song}
-                  <button onClick={() => handleAddSongToList(song)}>Add </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        <h3>List Items:</h3>
-        <ul>
+        <div className="buttons">
+          <button className="create-button" onClick={handleSubmit}>Create List</button>
+          <button className="cancel-button" onClick={onClose}>Cancel</button>
+        </div>
+        <h3>Songs:</h3>
+        <ul className="list-items">
           {listItems.map((item, index) => (
             <li key={index}>
               {item}
-              <button onClick={() => handleMoveItem(index, -1)}>^</button>
-              <button onClick={() => handleMoveItem(index, 1)}>v</button>
+              <button onClick={() => handleMoveItem(index, -1)}>↑</button>
+              <button onClick={() => handleMoveItem(index, 1)}>↓</button>
               <button onClick={() => handleRemoveItem(index)}>X</button>
             </li>
           ))}
         </ul>
-        <button onClick={handleSubmit}>Create List</button>
-        <button onClick={onClose}>Cancel</button>
+        <h3>Albums:</h3>
+        <div className="albums-list">
+          {filteredSongs.map(({ _id, title, songs, band, release }) => (
+            <div key={_id}>
+              <h4>{title} - {band} ({release})</h4>
+              <ul>
+                {songs.map((song, index) => (
+                  <li key={index}>
+                    {song}
+                    <button onClick={() => handleAddSongToList(song)}>Add</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,75 @@
+.album-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.album-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.album-cover {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.album-details {
+  margin-top: 10px;
+}
+
+.album-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.album-info {
+  font-size: 1rem;
+}
+
+.album-rating {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.album-actions {
+  margin-top: 10px;
+}
+
+.album-actions button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.album-actions button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.songs-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.reviews {
+  margin-top: 20px;
+}
+
+.reviews h4 {
+  margin-bottom: 10px;
+}
+
+.reviews ul {
+  padding: 0;
+}
+
+.reviews li {
+  margin-bottom: 5px;
+}

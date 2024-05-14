@@ -34,7 +34,34 @@ const rateAlbum = async (req, res) => {
   }
 };
 
+const addReview = async (req, res) => {
+  try {
+    const albumId = req.params.id;
+    const { review } = req.body;
+
+    console.log('Adding review:', review);
+
+    if (!review) {
+      return res.status(400).json({ error: 'Review text is required' });
+    }
+
+    const album = await Album.findById(albumId);
+    if (!album) {
+      return res.status(404).json({ error: 'Album not found' });
+    }
+
+    album.reviews.push(review);
+    await album.save();
+
+    res.status(200).json({ message: 'Review submitted successfully' });
+  } catch (error) {
+    console.error('Error adding review:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getAllAlbums,
-  rateAlbum
+  rateAlbum,
+  addReview
 };

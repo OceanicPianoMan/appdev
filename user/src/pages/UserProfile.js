@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import CreateList from '../components/CreateList';
 
+import '../styles/UserProfile.css'; // Importing the stylesheet
+
 const UserProfile = () => {
   const { sessionID, userID } = useContext(UserContext);
   const { id } = useParams();
@@ -95,14 +97,14 @@ const UserProfile = () => {
   };
 
   return (
-    <div>
+    <div className="profile-container"> {/* Apply the profile-container class here */}
       <h2>User Profile</h2>
       {userData ? (
-        <div>
+        <div className="profile-info"> {/* Apply the profile-info class here */}
           <p>Username: {userData.username}</p>
           <p>First Name: {userData.firstName}</p>
           <p>Last Name: {userData.lastName}</p>
-          <p>
+          <p className="profile-actions"> {/* Apply the profile-actions class here */}
             Followers: {userData.followers}{' '}
             {userData._id !== userID && (
               <>
@@ -121,9 +123,9 @@ const UserProfile = () => {
             Lists: {userData.listQuantity}{' '}
             {userData._id === userID && <button onClick={handleCreateList}>Add List</button>}
           </p>
-          <ul>
+          <ul className="lists-container"> {/* Apply the lists-container class here */}
             {userData.lists.map((list, index) => (
-              <li key={index}>
+              <li className="list-item" key={index}> {/* Apply the list-item class here */}
                 <h3>List Name: {list.name}</h3>
                 <ul>
                   {list.items.map((item, itemIndex) => (

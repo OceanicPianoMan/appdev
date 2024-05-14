@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/Users.css';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -23,14 +24,14 @@ const Users = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Users</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="users-container">
+      <h2>DiscogDive Users</h2>
+      {error && <p className="error-message">{error}</p>}
       {users.map((user) => (
-        <div key={user._id}>
-          <h3>USER ID: {user._id}</h3>
-          <h3><Link to={`/UserProfile/${user._id}`}>{user.username}</Link></h3>
-          <p>Followers: {user.followers} / Following: {user.following}</p>
+        <div key={user._id} className="user-card">
+          <h3 className="user-username"><Link to={`/UserProfile/${user._id}`}>{user.username}</Link></h3>
+          <p className="user-followers">Followers: {user.followers} / Following: {user.following}</p>
+          <p className="user-followers">Lists: {user.listQuantity} / Reviews: {user.reviewQuantity}</p>
         </div>
       ))}
     </div>

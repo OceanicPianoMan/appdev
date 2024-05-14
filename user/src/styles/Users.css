@@ -1,0 +1,47 @@
+.users-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.user-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.user-id {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.user-username {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.user-username a {
+  color: green;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.user-username a:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.user-followers {
+  margin-bottom: 5px;
+}
+
+.user-following {
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: red;
+}

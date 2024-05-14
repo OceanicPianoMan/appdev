@@ -15,6 +15,7 @@ const albumSchema = new Schema({
     required: true
   },
   ratings: [{ type: Number, min: 0, max: 5 }],
+  reviews: [{ type: String }]
 });
 
 const Album = mongoose.model('Album', albumSchema);
