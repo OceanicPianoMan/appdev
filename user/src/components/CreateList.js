@@ -1,6 +1,28 @@
+// CreateList.js
+
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
 import '../styles/ListStyles.css';
+
+import Homework from '../styles/images/Homework.jpg';
+import IronMaiden from '../styles/images/IronMaiden.jpg';
+import Lateralus from '../styles/images/Lateralus.jpg';
+import SafeAsMilk from '../styles/images/SafeAsMilk.jpg';
+import TheSound from '../styles/images/TheSound.jpg';
+import Vol4 from '../styles/images/Vol4.png';
+import TVGirl from '../styles/images/TVGirl.jpg';
+import TheMollusk from '../styles/images/TheMollusk.jpg';
+
+const albumCovers = {
+  "Iron Maiden": IronMaiden,
+  "Lateralus": Lateralus,
+  "Homework": Homework,
+  "The Sound of Perseverance": TheSound,
+  "Safe As Milk": SafeAsMilk,
+  "Vol. 4" : Vol4,
+  "Who Really Cares" : TVGirl,
+  "The Mollusk" : TheMollusk,
+};
 
 const CreateList = ({ onClose }) => {
   const { sessionID, userID } = useContext(UserContext);
@@ -112,26 +134,33 @@ const CreateList = ({ onClose }) => {
         <ul className="list-items">
           {listItems.map((item, index) => (
             <li key={index}>
-              {item}
-              <button onClick={() => handleMoveItem(index, -1)}>↑</button>
-              <button onClick={() => handleMoveItem(index, 1)}>↓</button>
-              <button onClick={() => handleRemoveItem(index)}>X</button>
+              <div>
+                {item}
+                <button onClick={() => handleRemoveItem(index)}>X</button>
+              </div>
+              <div>
+                <button className="move-up" onClick={() => handleMoveItem(index, -1)}>↑</button>
+                <button className="move-down" onClick={() => handleMoveItem(index, 1)}>↓</button>
+              </div>
             </li>
           ))}
         </ul>
         <h3>Albums:</h3>
         <div className="albums-list">
           {filteredSongs.map(({ _id, title, songs, band, release }) => (
-            <div key={_id}>
-              <h4>{title} - {band} ({release})</h4>
-              <ul>
-                {songs.map((song, index) => (
-                  <li key={index}>
-                    {song}
-                    <button onClick={() => handleAddSongToList(song)}>Add</button>
-                  </li>
-                ))}
-              </ul>
+            <div key={_id} className="album">
+              <img className="album-cover-thumbnail" src={albumCovers[title]} alt={`${title} cover`} />
+              <div className="album-details">
+                <h4>{title} - {band} ({release})</h4>
+                <ul>
+                  {songs.map((song, index) => (
+                    <li key={index}>
+                      {song}
+                      <button onClick={() => handleAddSongToList(song)}>Add</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

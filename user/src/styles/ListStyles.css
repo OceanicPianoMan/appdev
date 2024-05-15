@@ -42,25 +42,53 @@
   align-items: center;
 }
 
-.list-items button {
+.list-items button,
+.albums-list button,
+.buttons button {
   background-color: #f44336;
   color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
+  margin-left: 5px;
   cursor: pointer;
 }
 
-.list-items button:hover {
+.list-items button:hover,
+.albums-list button:hover,
+.buttons button:hover {
   background-color: #d32f2f;
+}
+
+.list-items .move-up {
+  background-color: #4caf50; /* Green */
+}
+
+.list-items .move-down {
+  background-color: #2196f3; /* Blue */
 }
 
 .albums-list {
   margin-top: 20px;
 }
 
-.albums-list div {
+.album {
   margin-bottom: 20px;
+}
+
+.album-cover-details {
+  display: flex;
+  align-items: center;
+}
+
+.album-cover-thumbnail {
+  width: 150px;
+  height: 150px;
+  margin-right: 10px;
+}
+
+.album-details {
+  flex-grow: 1;
 }
 
 .albums-list h4 {
@@ -88,6 +116,10 @@
   margin-left: 10px;
 }
 
+.albums-list button:hover {
+  background-color: #45a049;
+}
+
 .buttons {
   display: flex;
   justify-content: flex-end;
@@ -106,10 +138,18 @@
   border-radius: 4px;
 }
 
+.buttons .create-button:hover {
+  background-color: #45a049;
+}
+
 .buttons .cancel-button {
   background-color: #f44336;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
+}
+
+.buttons .cancel-button:hover {
+  background-color: #d32f2f;
 }

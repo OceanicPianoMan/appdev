@@ -25,7 +25,6 @@ const Users = () => {
 
   return (
     <div className="users-container">
-      <h2>DiscogDive Users</h2>
       {error && <p className="error-message">{error}</p>}
       {users.map((user) => (
         <div key={user._id} className="user-card">

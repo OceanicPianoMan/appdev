@@ -11,6 +11,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [following, setFollowing] = useState(false);
+  const [showLists, setShowLists] = useState(false); // State to control list visibility
 
   useEffect(() => {
     if (!id) return;
@@ -96,46 +97,53 @@ const UserProfile = () => {
     }
   };
 
+  const toggleLists = () => {
+    setShowLists(!showLists); // Toggle the visibility of the lists section
+  };
+
   return (
-    <div className="profile-container"> {/* Apply the profile-container class here */}
-      <h2>User Profile</h2>
+    <div className="profile-container">
       {userData ? (
-        <div className="profile-info"> {/* Apply the profile-info class here */}
-          <p>Username: {userData.username}</p>
-          <p>First Name: {userData.firstName}</p>
-          <p>Last Name: {userData.lastName}</p>
-          <p className="profile-actions"> {/* Apply the profile-actions class here */}
+        <div className="profile-info">
+          <h2>{userData.username}</h2>
+          <p>Name: {userData.firstName} {userData.lastName}</p>
+          <p className="profile-actions">
             Followers: {userData.followers}{' '}
             {userData._id !== userID && (
               <>
                 {following ? (
-                  <button onClick={() => handleFollow('remove')}>Unfollow</button>
+                  <button onClick={() => handleFollow('remove')} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Unfollow</button>
                 ) : (
-                  <button onClick={() => handleFollow('add')}>Follow</button>
+                  <button onClick={() => handleFollow('add')} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Follow</button>
                 )}
               </>
             )}
           </p>
-          <p>
-            Following: {userData.following}{' '}     
-          </p>
+          <p>Following: {userData.following}</p>
           <p>
             Lists: {userData.listQuantity}{' '}
-            {userData._id === userID && <button onClick={handleCreateList}>Add List</button>}
           </p>
-          <ul className="lists-container"> {/* Apply the lists-container class here */}
-            {userData.lists.map((list, index) => (
-              <li className="list-item" key={index}> {/* Apply the list-item class here */}
-                <h3>List Name: {list.name}</h3>
-                <ul>
-                  {list.items.map((item, itemIndex) => (
-                    <li key={itemIndex}>{item}</li>
+          {userData._id === userID && <button onClick={handleCreateList} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Create Playlist</button>}
+          {userData.lists.length > 0 && (
+            <div>
+              <button onClick={toggleLists} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Show Playlists</button>
+              {showLists && (
+                <ul className="lists-container">
+                  {userData.lists.map((list, index) => (
+                    <li className="list-item" key={index}>
+                      <h3>{list.name}</h3>
+                      <ul>
+                        {list.items.map((item, itemIndex) => (
+                          <li key={itemIndex}>{item}</li>
+                        ))}
+                      </ul>
+                      {userData._id === userID && <button onClick={() => handleDeleteList(list._id)} style={{backgroundColor: '#dc3545', color: '#fff', borderRadius: '4px', border: 'none', padding: '6px 12px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Delete List</button>}
+                    </li>
                   ))}
                 </ul>
-                {userData._id === userID && <button onClick={() => handleDeleteList(list._id)}>Delete List</button>}
-              </li>
-            ))}
-          </ul>
+              )}
+            </div>
+          )}
           <p>Albums: {userData.albumQuantity}</p>
           <p>Reviews: {userData.reviewQuantity}</p>
         </div>
