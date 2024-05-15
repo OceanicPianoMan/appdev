@@ -15,11 +15,16 @@ const UserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Trim whitespace from the input values
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+    const trimmedUsername = username.trim();
+
     const registerUser = {
-      firstName,
-      lastName,
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
       password,
-      username,
+      username: trimmedUsername,
     };
 
     try {

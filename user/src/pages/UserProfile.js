@@ -1,17 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import CreateList from '../components/CreateList';
 
-import '../styles/UserProfile.css'; // Importing the stylesheet
+import '../styles/UserProfile.css';
 
 const UserProfile = () => {
-  const { sessionID, userID } = useContext(UserContext);
+  const { sessionID, userID, dispatch } = useContext(UserContext);
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
+  const [newUsername, setNewUsername] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [following, setFollowing] = useState(false);
-  const [showLists, setShowLists] = useState(false); // State to control list visibility
+  const [showLists, setShowLists] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showUsernameForm, setShowUsernameForm] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -26,7 +29,6 @@ const UserProfile = () => {
       }
       const userData = await response.json();
       setUserData(userData);
-      console.log("USER DATA:", userData);
       setFollowing(userData.following);
     } catch (error) {
       console.error(error);
@@ -35,9 +37,8 @@ const UserProfile = () => {
 
   const handleFollow = async (action) => {
     try {
-      // Check if the user is already followed to prevent the odd runtime error
       if (action === 'add' && following) {
-        return; // Exit early if already followed
+        return;
       }
 
       const response = await fetch(`/api/userroutes/${id}/follow`, {
@@ -53,13 +54,18 @@ const UserProfile = () => {
         throw new Error('Failed to update followers');
       }
 
-      // Update following state based on action
       if (action === 'add') {
         setFollowing(true);
-        setUserData(prevUserData => ({ ...prevUserData, followers: prevUserData.followers + 1 }));
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          followers: prevUserData.followers + 1,
+        }));
       } else if (action === 'remove') {
         setFollowing(false);
-        setUserData(prevUserData => ({ ...prevUserData, followers: prevUserData.followers - 1 }));
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          followers: prevUserData.followers - 1,
+        }));
       }
     } catch (error) {
       console.error(error);
@@ -72,7 +78,7 @@ const UserProfile = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
-    fetchUserData(); // Refresh user data after closing popup
+    fetchUserData();
   };
 
   const handleDeleteList = async (listId) => {
@@ -89,16 +95,74 @@ const UserProfile = () => {
         throw new Error('Failed to delete list');
       }
 
-      // Refresh user data to reflect changes
       fetchUserData();
     } catch (error) {
       console.error(error);
-      // Handle error if needed
     }
   };
 
   const toggleLists = () => {
-    setShowLists(!showLists); // Toggle the visibility of the lists section
+    setShowLists(!showLists);
+  };
+
+  const handleUpdateNameClick = () => {
+    setErrorMessage('');
+    setShowUsernameForm(true);
+  };
+
+  const handleUpdateUsername = async () => {
+    try {
+      const trimmedUsername = newUsername.trim();
+      const response = await fetch(`/api/userroutes/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: sessionID,
+        },
+        body: JSON.stringify({ newUsername: trimmedUsername }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update username');
+      }
+
+      const updatedUser = await response.json();
+      setUserData(updatedUser);
+      setNewUsername('');
+      setErrorMessage('');
+      setShowUsernameForm(false);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Are you sure you want to delete your account?")) {
+      try {
+        const response = await fetch(`/api/userroutes/${userID}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: sessionID,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete account');
+        }
+
+        // Dispatch logout action to reset user context
+        dispatch({ type: 'LOGOUT' });
+
+        window.location.href = "/";
+
+        // Navigate to main index after deletion
+      } catch (error) {
+        console.error(error);
+        // Handle error...
+      }
+    }
   };
 
   return (
@@ -106,27 +170,45 @@ const UserProfile = () => {
       {userData ? (
         <div className="profile-info">
           <h2>{userData.username}</h2>
+          {userData._id === userID && (
+            <div className="update-username">
+              {showUsernameForm ? (
+                <>
+                  <input
+                    type="text"
+                    placeholder="New username"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                  />
+                  <button onClick={handleUpdateUsername}>Submit</button>
+                  <button onClick={() => setShowUsernameForm(false)}>Cancel</button>
+                  {errorMessage && <p className="error-message">{errorMessage}</p>}
+                </>
+              ) : (
+                <button onClick={handleUpdateNameClick}>Settings</button>
+              )}
+              <button onClick={handleDeleteAccount}>Delete Account</button>
+            </div>
+          )}
           <p>Name: {userData.firstName} {userData.lastName}</p>
           <p className="profile-actions">
             Followers: {userData.followers}{' '}
             {userData._id !== userID && (
               <>
                 {following ? (
-                  <button onClick={() => handleFollow('remove')} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Unfollow</button>
+                  <button onClick={() => handleFollow('remove')}>Unfollow</button>
                 ) : (
-                  <button onClick={() => handleFollow('add')} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Follow</button>
+                  <button onClick={() => handleFollow('add')}>Follow</button>
                 )}
               </>
             )}
           </p>
           <p>Following: {userData.following}</p>
-          <p>
-            Lists: {userData.listQuantity}{' '}
-          </p>
-          {userData._id === userID && <button onClick={handleCreateList} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Create Playlist</button>}
+          <p>Lists: {userData.listQuantity}</p>
+          {userData._id === userID && <button onClick={handleCreateList} className="profile-button">Create Playlist</button>}
           {userData.lists.length > 0 && (
             <div>
-              <button onClick={toggleLists} style={{backgroundColor: '#007bff', color: '#fff', borderRadius: '4px', border: 'none', padding: '8px 16px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Show Playlists</button>
+              <button onClick={toggleLists} className="profile-button">Show Playlists</button>
               {showLists && (
                 <ul className="lists-container">
                   {userData.lists.map((list, index) => (
@@ -137,7 +219,7 @@ const UserProfile = () => {
                           <li key={itemIndex}>{item}</li>
                         ))}
                       </ul>
-                      {userData._id === userID && <button onClick={() => handleDeleteList(list._id)} style={{backgroundColor: '#dc3545', color: '#fff', borderRadius: '4px', border: 'none', padding: '6px 12px', cursor: 'pointer', transition: 'background-color 0.3s ease'}}>Delete List</button>}
+                      {userData._id === userID && <button onClick={() => handleDeleteList(list._id)} className="profile-button">Delete List</button>}
                     </li>
                   ))}
                 </ul>

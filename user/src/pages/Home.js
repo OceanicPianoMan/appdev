@@ -1,22 +1,21 @@
 import React from 'react';
+import Users from './Users';
+import Albums from './Albums';
+import '../styles/Home.css'; // Import the new CSS file
 
 const Home = () => {
-  // Dummy data for cards
-  const cards = [
-    { id: 1, title: 'Card 1', description: 'Description for Card 1' },
-    { id: 2, title: 'Card 2', description: 'Description for Card 2' },
-    { id: 3, title: 'Card 3', description: 'Description for Card 3' },
-    // Add more cards as needed
-  ];
-
   return (
     <div className="home">
-      {cards.map(card => (
-        <div key={card.id} className="card">
-          <h2>{card.title}</h2>
-          <p>{card.description}</p>
+      <div className="section">
+        <h2>WELCOME TO DISCOG DIVE!</h2>
+        <div className="home-users-container">
+          <Users />
         </div>
-      ))}
+      </div>
+      <div className="section">
+        <h2>Albums</h2>
+        <Albums />
+      </div>
     </div>
   );
 }

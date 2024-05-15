@@ -156,38 +156,58 @@ const getUser = async (req, res) => {
 
 //delete a user
 const deleteUser = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json( {error: 'no such user exsists!'} )
+    return res.status(404).json({ error: 'No such user exists!' });
   }
 
-  const userDelete = await User.findOneAndDelete( {_id: id} )
+  try {
+    const userDelete = await User.findOneAndDelete({ _id: id });
 
-  if (!userDelete) {
-    return res.status(404).json({error: 'no such user exsists!'})
+    if (!userDelete) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
   }
-
-  res.status(200).json(userDelete)
-}
+};
 
 //update a user
 const updateUser = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
+  const { newUsername } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json( {error: 'no such user exsists!'} )
+  if (!newUsername) {
+    return res.status(400).json({ error: 'New username is required' });
   }
 
-  const userUpdate = await User.findOneAndUpdate({_id: id}, {
-    ...req.body
-  })
+  try {
+    const existingUser = await User.findOne({ username: newUsername });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username already taken' });
+    }
 
-  if (!userUpdate) {
-    return res.status(404).json({error: 'no such user exsists!'})
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { username: newUsername },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
   }
-  res.status(200).json(userUpdate)
-}
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
