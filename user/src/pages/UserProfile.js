@@ -156,11 +156,8 @@ const UserProfile = () => {
         dispatch({ type: 'LOGOUT' });
 
         window.location.href = "/";
-
-        // Navigate to main index after deletion
       } catch (error) {
         console.error(error);
-        // Handle error...
       }
     }
   };
